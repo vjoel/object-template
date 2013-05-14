@@ -32,11 +32,40 @@ class ObjectTemplate
     ##   for example: nil, then single values (==), then patterns (===)
   end
 
+  def === obj # adapted from rinda/rinda.rb
+    return false unless obj.respond_to?(@shibboleth)
+    return false unless @size == obj.size
+    @matchers.each do |k, v|
+      begin
+        it = obj.fetch(k)
+      rescue
+        return false
+      end
+      next if v.nil?
+      next if v == it
+      next if v === it
+      return false
+    end
+    return true
+  end
+
+  def inspect
+    "<#{self.class}: #{@spec}>"
+  end
+end
+
+class RubyObjectTemplate < ObjectTemplate
+  def fill_matchers k, v
+    @matchers << [k, v]
+  end
+end
+
+class PortableObjectTemplate < ObjectTemplate
   def fill_matchers k, v
     case v
     when nil
       @matchers << [k, nil]
-        # This must be there to ensure the key exists
+        # This must be there to ensure the key exists in the hash case.
     when Hash
       v.each do |kk, vv|
         case kk
@@ -67,25 +96,4 @@ class ObjectTemplate
     "list"   => Array,
     "map"    => Hash
   }
-  
-  def === obj # adapted from rinda/rinda.rb
-    return false unless obj.respond_to?(@shibboleth)
-    return false unless @size == obj.size
-    @matchers.each do |k, v|
-      begin
-        it = obj.fetch(k)
-      rescue
-        return false
-      end
-      next if v.nil?
-      next if v == it
-      next if v === it
-      return false
-    end
-    return true
-  end
-
-  def inspect
-    "<#{self.class}: #{@spec}>"
-  end
 end

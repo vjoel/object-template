@@ -5,6 +5,8 @@ require 'assert-threequal'
 class TestMatch < Minitest::Test
   include AssertThreequal
   
+  POT = PortableObjectTemplate
+  
   attr_reader :spec, :template
   
   def setup
@@ -14,7 +16,7 @@ class TestMatch < Minitest::Test
         {set: ["red", "green"]},
         {type: "number"},
         {type: "number", range: [1,100]} ]
-    @template = ObjectTemplate.new spec
+    @template = POT.new spec
   end
 
   def test_match
@@ -42,47 +44,47 @@ class TestMatch < Minitest::Test
   
   def test_match_types
     assert_threequal(
-      ObjectTemplate.new([{type: "string"}]),
+      POT.new([{type: "string"}]),
       [ "some string" ]
     )
     assert_threequal(
-      ObjectTemplate.new([{type: "number"}]),
+      POT.new([{type: "number"}]),
       [ 42 ]
     )
     assert_threequal(
-      ObjectTemplate.new([{type: "list"}]),
+      POT.new([{type: "list"}]),
       [ [1,2,3] ]
     )
     assert_threequal(
-      ObjectTemplate.new([{type: "map"}]),
+      POT.new([{type: "map"}]),
       [ {a: 1} ]
     )
     
     assert_not_threequal(
-      ObjectTemplate.new([{type: "string"}]),
+      POT.new([{type: "string"}]),
       [ 12 ]
     )
     assert_not_threequal(
-      ObjectTemplate.new([{type: "number"}]),
+      POT.new([{type: "number"}]),
       [ "42" ]
     )
     assert_not_threequal(
-      ObjectTemplate.new([{type: "list"}]),
+      POT.new([{type: "list"}]),
       [ {a: 1} ]
     )
     assert_not_threequal(
-      ObjectTemplate.new([{type: "map"}]),
+      POT.new([{type: "map"}]),
       [ [1,2,3] ]
     )
   end
   
   def test_regex
     assert_threequal(
-      ObjectTemplate.new([{type: "string", regex: "^f...r$"}]),
+      POT.new([{type: "string", regex: "^f...r$"}]),
       [ "fubar" ]
     )
     assert_not_threequal(
-      ObjectTemplate.new([{type: "string", regex: "^f...r$"}]),
+      POT.new([{type: "string", regex: "^f...r$"}]),
       [ "zfubarz" ]
     )
   end
