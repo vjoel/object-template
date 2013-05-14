@@ -1,5 +1,9 @@
 class ObjectTemplate
   def initialize spec
+    unless spec.respond_to? :size and spec.respond_to? :each
+      raise ArgumentError, "cannot be used as a template: #{spec.inspect}"
+    end
+
     @spec = spec
     @size = spec.size
     @matchers = []
@@ -34,10 +38,14 @@ class ObjectTemplate
           @matchers << [k, Range.new(*vv)]
         when :regex, "regex"
           @matchers << [k, Regexp.new(vv)]
+        else
+          raise ArgumentError,
+            "unrecognized match specifier: #{kk.inspect}"
         end
       end
     else
-      raise ArgumentError, "unhandled: #{v.inspect}" ##?
+      raise ArgumentError,
+        "expected nil or Hash in template, found #{v.inspect}"
     end
   end
   
