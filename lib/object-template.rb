@@ -20,7 +20,7 @@ class ObjectTemplate
           end
         end
       else
-        raise ArgumentError ##?
+        raise ArgumentError, "unhandled: #{v.inspect}" ##?
       end
     end
   end
