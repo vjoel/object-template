@@ -18,14 +18,15 @@ class TestMatch < Minitest::Test
     @spec =
       [ {value: "foo"},
         nil,
+        {set: ["red", "green"]},
         {type: "number"} ]
     @template = ObjectTemplate.new spec
   end
 
   def test_match
     [
-      [ "foo", [1,2,"three"], 5.02 ],
-      [ "foo", {}, -99 ]
+      [ "foo", [1,2,"three"], "green", 5.02 ],
+      [ "foo", {}, "red", -99 ]
     ].each do |obj|
       assert_threequal template, obj
     end
@@ -33,10 +34,11 @@ class TestMatch < Minitest::Test
   
   def test_not_match
     [
-      [ "bar", {}, -99 ],
-      [ "foo", {}, "99" ],
+      [ "bar", {}, "red", -99 ],
+      [ "foo", {}, "blue", -99 ],
+      [ "foo", {}, "red", "99" ],
       [ "foo" ],
-      [ "foo", {}, -99, "extra" ],
+      [ "foo", {}, "red", -99, "extra" ],
       [ ],
     ].each do |obj|
       assert_not_threequal template, obj

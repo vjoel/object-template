@@ -11,6 +11,8 @@ class ObjectTemplate
           case kk
           when :value, "value"
             @matchers << [i, vv]
+          when :set, "set"
+            @matchers << [i, vv.method(:member?).to_proc]
           when :type, "type"
             @matchers << [i, CLASS_FOR[vv]]
           end
