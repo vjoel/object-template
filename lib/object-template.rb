@@ -1,4 +1,8 @@
 class ObjectTemplate
+  # The key_converter is for matching objects that, for example, have had symbol
+  # keys serialized to strings. Using a converter that round-trips through the
+  # same serialializer, symbols in keys will match strings. However, symbols in
+  # values will not.
   def initialize spec, key_converter = nil
     unless spec.respond_to? :size and spec.respond_to? :each
       raise ArgumentError, "cannot be used as a template: #{spec.inspect}"
@@ -11,7 +15,10 @@ class ObjectTemplate
     if spec.respond_to? :to_hash # assume hash-like
       @shibboleth = :to_hash
       spec.each do |k, v|
-        fill_matchers (key_converter ? key_converter[k]: k), v
+        kc = key_converter ? key_converter[k]: k
+          # Note: cannot use key_converter[v] because v may have class, regex,
+          # or other non-serializable object.
+        fill_matchers kc, v
       end
 
     else # assume array-like
@@ -20,6 +27,9 @@ class ObjectTemplate
         fill_matchers i, v unless v.nil?
       end
     end
+
+    ## optimization: reorder @matchers so that easy ones come first
+    ##   for example: nil, then single values (==), then patterns (===)
   end
 
   def fill_matchers k, v
@@ -58,7 +68,7 @@ class ObjectTemplate
     "map"    => Hash
   }
   
-  def === obj
+  def === obj # adapted from rinda/rinda.rb
     return false unless obj.respond_to?(@shibboleth)
     return false unless @size == obj.size
     @matchers.each do |k, v|
