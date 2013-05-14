@@ -82,4 +82,15 @@ class TestMatch < Minitest::Test
       [ [1,2,3] ]
     )
   end
+  
+  def test_regex
+    assert_threequal(
+      ObjectTemplate.new([{type: "string", regex: "^f...r$"}]),
+      [ "fubar" ]
+    )
+    assert_not_threequal(
+      ObjectTemplate.new([{type: "string", regex: "^f...r$"}]),
+      [ "zfubarz" ]
+    )
+  end
 end

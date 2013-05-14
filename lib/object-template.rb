@@ -17,6 +17,8 @@ class ObjectTemplate
             @matchers << [i, CLASS_FOR[vv]]
           when :range, "range"
             @matchers << [i, Range.new(*vv)]
+          when :regex, "regex"
+            @matchers << [i, Regexp.new(vv)]
           end
         end
       else
