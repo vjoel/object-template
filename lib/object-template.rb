@@ -15,6 +15,8 @@ class ObjectTemplate
             @matchers << [i, vv.method(:member?).to_proc]
           when :type, "type"
             @matchers << [i, CLASS_FOR[vv]]
+          when :range, "range"
+            @matchers << [i, Range.new(*vv)]
           end
         end
       else
