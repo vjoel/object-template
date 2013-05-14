@@ -26,7 +26,10 @@ class ObjectTemplate
   end
   
   CLASS_FOR = {
-    "number" => Numeric
+    "number" => Numeric,
+    "string" => String,
+    "list"   => Array,
+    "map"    => Hash
   }
   
   def === obj

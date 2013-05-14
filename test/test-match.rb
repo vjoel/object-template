@@ -46,4 +46,40 @@ class TestMatch < Minitest::Test
       assert_not_threequal template, obj
     end
   end
+  
+  def test_match_types
+    assert_threequal(
+      ObjectTemplate.new([{type: "string"}]),
+      [ "some string" ]
+    )
+    assert_threequal(
+      ObjectTemplate.new([{type: "number"}]),
+      [ 42 ]
+    )
+    assert_threequal(
+      ObjectTemplate.new([{type: "list"}]),
+      [ [1,2,3] ]
+    )
+    assert_threequal(
+      ObjectTemplate.new([{type: "map"}]),
+      [ {a: 1} ]
+    )
+    
+    assert_not_threequal(
+      ObjectTemplate.new([{type: "string"}]),
+      [ 12 ]
+    )
+    assert_not_threequal(
+      ObjectTemplate.new([{type: "number"}]),
+      [ "42" ]
+    )
+    assert_not_threequal(
+      ObjectTemplate.new([{type: "list"}]),
+      [ {a: 1} ]
+    )
+    assert_not_threequal(
+      ObjectTemplate.new([{type: "map"}]),
+      [ [1,2,3] ]
+    )
+  end
 end
