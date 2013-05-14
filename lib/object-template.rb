@@ -17,7 +17,7 @@ class ObjectTemplate
     else # assume array-like
       @shibboleth = :to_ary
       spec.each_with_index do |v, i|
-        fill_matchers i, v
+        fill_matchers i, v unless v.nil?
       end
     end
   end
