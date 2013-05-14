@@ -1,5 +1,5 @@
 class ObjectTemplate
-  def initialize spec
+  def initialize spec, key_converter = nil
     unless spec.respond_to? :size and spec.respond_to? :each
       raise ArgumentError, "cannot be used as a template: #{spec.inspect}"
     end
@@ -11,7 +11,7 @@ class ObjectTemplate
     if spec.respond_to? :to_hash # assume hash-like
       @shibboleth = :to_hash
       spec.each do |k, v|
-        fill_matchers k, v
+        fill_matchers (key_converter ? key_converter[k]: k), v
       end
 
     else # assume array-like
