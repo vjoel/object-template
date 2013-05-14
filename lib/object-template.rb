@@ -54,12 +54,18 @@ class ObjectTemplate
   end
 end
 
+# Template specified by array or hash of ruby objects. The #== and #===
+# methods of entry values are used in matching. Entry values may include
+# classes, regexes, ranges, and so on, in addition to single values.
 class RubyObjectTemplate < ObjectTemplate
   def fill_matchers k, v
     @matchers << [k, v]
   end
 end
 
+# Template specified by array or hash in a portable format composed of
+# strings, numbers, booleans, arrays, and hashes. Special entry values
+# correspond to wildcards and matchers of several kinds.
 class PortableObjectTemplate < ObjectTemplate
   def fill_matchers k, v
     case v
