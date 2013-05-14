@@ -36,4 +36,12 @@ class TestHash < Minitest::Test
         {foo: "anything", bar: 0}
     )
   end
+
+  def test_not_match_renamed_fields
+    assert_not_threequal(
+      ObjectTemplate.new(
+        {foo: nil}),
+        {fooz: "anything"}
+    )
+  end
 end

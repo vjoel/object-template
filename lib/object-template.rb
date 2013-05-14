@@ -24,7 +24,9 @@ class ObjectTemplate
 
   def fill_matchers k, v
     case v
-    when nil # no matcher
+    when nil
+      @matchers << [k, nil]
+        # This must be there to ensure the key exists
     when Hash
       v.each do |kk, vv|
         case kk
