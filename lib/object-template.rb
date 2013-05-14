@@ -72,4 +72,8 @@ class ObjectTemplate
     end
     return true
   end
+
+  def inspect
+    "<#{self.class}: #{@spec}>"
+  end
 end
