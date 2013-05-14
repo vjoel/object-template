@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'object-template'
 require 'assert-threequal'
 
-class TestHash < Minitest::Test
+class TestKeyConv < Minitest::Test
   include AssertThreequal
 
   def test_match_converted_key
