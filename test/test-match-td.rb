@@ -1,6 +1,13 @@
 require 'minitest/autorun'
 require 'object-template'
 require 'eq3'
+require 'set'
+
+class Member < Set ## ?
+  def === other
+    member? other
+  end
+end
 
 class TestMatchTD < Minitest::Test
   include Eq3
@@ -48,6 +55,19 @@ literals.each do |x1|
     eq3       [x1, x2],        [x1, x2],   [{value: x1}, {value: x2}]
   end
 end
+#=========================================================
+  end
+
+  def test_set
+#=========================================================
+#=            LITERAL |             ROT |            POT
+#=========================================================
+#= 3. every test that can be expressed in terms of a set of values in the
+#=    template
+#=
+eq3                [1], [Member[0,1,2]], [{set: [0,1,2]}]
+#=========================================================
+ne3                [4], [Member[0,1,2]], [{set: [0,1,2]}]
 #=========================================================
   end
 end
