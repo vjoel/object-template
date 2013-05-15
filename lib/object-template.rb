@@ -65,7 +65,8 @@ end
 
 # Template specified by array or hash in a portable format composed of
 # strings, numbers, booleans, arrays, and hashes. Special entry values
-# correspond to wildcards and matchers of several kinds.
+# correspond to wildcards and matchers of several kinds. See the unit
+# tests for examples.
 class PortableObjectTemplate < ObjectTemplate
   def fill_matchers k, v
     case v
