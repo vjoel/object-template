@@ -75,7 +75,7 @@ ne3                [4], [Member[0,1,2]], [{set: [0,1,2]}]
 #=========================================================
 #=            LITERAL |             ROT |            POT
 #=========================================================
-#= 3. every test that can be expressed in terms of a set of values in the
+#= 3. every test that can be expressed in terms of a range in the
 #=    template
 #=
 eq3                [0],          [0..2], [{range: [0,2]}]
@@ -84,6 +84,19 @@ eq3                [2],          [0..2], [{range: [0,2]}]
 ne3               [-1],          [0..2], [{range: [0,2]}]
 ne3                [3],          [0..2], [{range: [0,2]}]
 ne3                [2],         [0...2], [{range: [0,2, true]}]
+#=========================================================
+  end
+
+  def test_regex
+#=========================================================
+#=            LITERAL |             ROT |            POT
+#=========================================================
+#= 3. every test that can be expressed in terms of a regex in the
+#=    template
+#=
+eq3            ["foo"],          [/oo/], [{regex: "oo"}]
+#=========================================================
+ne3            ["foo"],          [/zz/], [{regex: "zz"}]
 #=========================================================
   end
 end
