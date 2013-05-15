@@ -9,7 +9,7 @@ class TestHash < Minitest::Test
 
   def test_match_empty_template
     assert_threequal(
-      PortableObjectTemplate.new(
+      POT.new(
         {}),
         {}
     )
@@ -17,7 +17,7 @@ class TestHash < Minitest::Test
 
   def test_match_nil_template
     assert_threequal(
-      PortableObjectTemplate.new(
+      POT.new(
         {foo: nil}),
         {foo: "anything"}
     )
@@ -25,7 +25,7 @@ class TestHash < Minitest::Test
 
   def test_not_match_missing_fields
     assert_not_threequal(
-      PortableObjectTemplate.new(
+      POT.new(
         {foo: nil}),
         {}
     )
@@ -33,7 +33,7 @@ class TestHash < Minitest::Test
 
   def test_not_match_extra_fields
     assert_not_threequal(
-      PortableObjectTemplate.new(
+      POT.new(
         {foo: nil}),
         {foo: "anything", bar: 0}
     )
@@ -41,7 +41,7 @@ class TestHash < Minitest::Test
 
   def test_not_match_renamed_fields
     assert_not_threequal(
-      PortableObjectTemplate.new(
+      POT.new(
         {foo: nil}),
         {fooz: "anything"}
     )
