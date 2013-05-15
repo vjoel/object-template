@@ -127,4 +127,36 @@ ne3          [[1,2,3]],         [Hash],  [{type: "map"}]
     ne3 ["abc"],   [0], [{type: "string", regex: "d", set: ["abc", "def"]}]
     ne3 ["abc"],   [0], [{type: "string", regex: "b", set: ["xyz", "def"]}]
   end
+
+  # test that a mismatch in one entry makes the template match fail
+  def test_all_entries
+    eq3 [                5,           1.23,            "bar",         "baz",          [1,2],          {a: 1} ],
+        [          Numeric,           1..3,           String,          /az/,          Array,          {a: 1} ],
+        [ {type: "number"}, {range: [1,3]}, {type: "string"}, {regex: "az"}, {type: "list"}, {value: {a: 1}} ]
+
+    ne3 [            "foo",           1.23,            "bar",         "baz",          [1,2],          {a: 1} ],
+        [          Numeric,           1..3,           String,          /az/,          Array,          {a: 1} ],
+        [ {type: "number"}, {range: [1,3]}, {type: "string"}, {regex: "az"}, {type: "list"}, {value: {a: 1}} ]
+
+    ne3 [                5,           4.23,            "bar",         "baz",          [1,2],          {a: 1} ],
+        [          Numeric,           1..3,           String,          /az/,          Array,          {a: 1} ],
+        [ {type: "number"}, {range: [1,3]}, {type: "string"}, {regex: "az"}, {type: "list"}, {value: {a: 1}} ]
+
+    ne3 [                5,           1.23,          ["bar"],         "baz",          [1,2],          {a: 1} ],
+        [          Numeric,           1..3,           String,          /az/,          Array,          {a: 1} ],
+        [ {type: "number"}, {range: [1,3]}, {type: "string"}, {regex: "az"}, {type: "list"}, {value: {a: 1}} ]
+
+    ne3 [                5,           1.23,            "bar",         "bAz",          [1,2],          {a: 1} ],
+        [          Numeric,           1..3,           String,          /az/,          Array,          {a: 1} ],
+        [ {type: "number"}, {range: [1,3]}, {type: "string"}, {regex: "az"}, {type: "list"}, {value: {a: 1}} ]
+
+    ne3 [                5,           1.23,            "bar",         "baz",          {a:2},          {a: 1} ],
+        [          Numeric,           1..3,           String,          /az/,          Array,          {a: 1} ],
+        [ {type: "number"}, {range: [1,3]}, {type: "string"}, {regex: "az"}, {type: "list"}, {value: {a: 1}} ]
+
+    ne3 [                5,           1.23,            "bar",         "baz",          [1,2],          {a: 2} ],
+        [          Numeric,           1..3,           String,          /az/,          Array,          {a: 1} ],
+        [ {type: "number"}, {range: [1,3]}, {type: "string"}, {regex: "az"}, {type: "list"}, {value: {a: 1}} ]
+
+  end
 end
