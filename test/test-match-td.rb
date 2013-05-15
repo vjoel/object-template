@@ -99,4 +99,23 @@ eq3            ["foo"],          [/oo/], [{regex: "oo"}]
 ne3            ["foo"],          [/zz/], [{regex: "zz"}]
 #=========================================================
   end
+
+  def test_type
+#=========================================================
+#=            LITERAL |             ROT |            POT
+#=========================================================
+#= 3. every test that can be expressed in terms of a type in the
+#=    template
+#=
+eq3               [42],       [Numeric], [{type: "number"}]
+eq3            ["foo"],        [String], [{type: "string"}]
+eq3          [[1,2,3]],         [Array], [{type: "list"}]
+eq3       [{a:1, b:2}],         [Hash],  [{type: "map"}]
+#=========================================================
+ne3             ["42"],       [Numeric], [{type: "number"}]
+ne3              [123],        [String], [{type: "string"}]
+ne3       [{a:1, b:2}],         [Array], [{type: "list"}]
+ne3          [[1,2,3]],         [Hash],  [{type: "map"}]
+#=========================================================
+  end
 end
