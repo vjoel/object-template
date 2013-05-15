@@ -75,7 +75,7 @@ ne3                [4], [Member[0,1,2]], [{set: [0,1,2]}]
 #=========================================================
 #=            LITERAL |             ROT |            POT
 #=========================================================
-#= 3. every test that can be expressed in terms of a range in the
+#= 4. every test that can be expressed in terms of a range in the
 #=    template
 #=
 eq3                [0],          [0..2], [{range: [0,2]}]
@@ -91,7 +91,7 @@ ne3                [2],         [0...2], [{range: [0,2, true]}]
 #=========================================================
 #=            LITERAL |             ROT |            POT
 #=========================================================
-#= 3. every test that can be expressed in terms of a regex in the
+#= 5. every test that can be expressed in terms of a regex in the
 #=    template
 #=
 eq3            ["foo"],          [/oo/], [{regex: "oo"}]
@@ -104,7 +104,7 @@ ne3            ["foo"],          [/zz/], [{regex: "zz"}]
 #=========================================================
 #=            LITERAL |             ROT |            POT
 #=========================================================
-#= 3. every test that can be expressed in terms of a type in the
+#= 6. every test that can be expressed in terms of a type in the
 #=    template
 #=
 eq3               [42],       [Numeric], [{type: "number"}]
@@ -117,5 +117,14 @@ ne3              [123],        [String], [{type: "string"}]
 ne3       [{a:1, b:2}],         [Array], [{type: "list"}]
 ne3          [[1,2,3]],         [Hash],  [{type: "map"}]
 #=========================================================
+  end
+
+  def test_conjunction
+    ## note that ROT doesn't support conjunctions, though it would be easy
+    ## to implement.
+    eq3 ["abc"], [nil], [{type: "string", regex: "b", set: ["abc", "def"]}]
+    ne3 ["abc"],   [0], [{type: "list",   regex: "b", set: ["abc", "def"]}]
+    ne3 ["abc"],   [0], [{type: "string", regex: "d", set: ["abc", "def"]}]
+    ne3 ["abc"],   [0], [{type: "string", regex: "b", set: ["xyz", "def"]}]
   end
 end
