@@ -96,11 +96,15 @@ class PortableObjectTemplate < ObjectTemplate
         "expected nil or Hash in template, found #{v.inspect}"
     end
   end
-  
+
   CLASS_FOR = {
     "number" => Numeric,
     "string" => String,
     "list"   => Array,
     "map"    => Hash
   }
+
+  CLASS_FOR.default_proc = proc do |h,k|
+    raise ArgumentError, "no known class for matching type #{k.inspect}"
+  end
 end
