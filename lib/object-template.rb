@@ -5,9 +5,7 @@ class ObjectTemplate
   # Used internally by PortableObjectTemplate, but can also be used in
   # RubyObjectTemplate or in case statements.
   class MemberMatchingSet < Set
-    def === other
-      member? other
-    end
+    alias === member?
   end
 
   # The key_converter is for matching objects that, for example, have had symbol
