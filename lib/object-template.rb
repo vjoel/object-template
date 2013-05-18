@@ -107,7 +107,7 @@ class PortableObjectTemplate < ObjectTemplate
         when :set, "set"
           @matchers << [k, MemberMatchingSet.new(vv)]
         when :type, "type"
-          @matchers << [k, CLASS_FOR[vv]]
+          @matchers << [k, CLASS_FOR[vv.to_s]]
         when :range, "range"
           @matchers << [k, Range.new(*vv)]
         when :regex, "regex"
