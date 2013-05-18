@@ -49,11 +49,7 @@ class ObjectTemplate
       when Range;             2
       when Module;            3
       when Regexp;            4
-      when MemberMatchingSet;
-        if v.size < 10;       3
-        elsif v.size < 100;   4
-        else                  5
-        end
+      when MemberMatchingSet; 4
       when Proc;              5
       else                    1 # assume it is a value
       end
