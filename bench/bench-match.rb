@@ -11,7 +11,7 @@ SEED = 1237
 def dataset_for seed
   srand seed
   strs = ("a".."z").map {|c| "fo" + c}
-  objs = (1..1000).map {[ strs.sample, rand(50) ]}
+  objs = (1..1000).map {|i| [ i, strs.sample, rand(50) ]}
   {seed: seed, objs: objs}
 end
 
@@ -31,7 +31,7 @@ def run_bench_on_template template, seed: nil, objs: nil
   puts "rate     = %12.3f iter/sec" % rslt[:rate]
 end
 
-template = POT.new [ {regex: "foo"}, {value: 0} ]
+template = POT.new [ {set: [0,1,2,*100..999]}, {regex: "foo"}, {value: 0} ]
 run_bench_on_template template, dataset_for(SEED)
 
 template.optimize!
