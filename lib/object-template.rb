@@ -27,9 +27,22 @@ class ObjectTemplate
         fill_matchers i, v unless v.nil?
       end
     end
+  end
 
-    ## optimization: reorder @matchers so that easy ones come first
-    ##   for example: nil, then single values (==), then patterns (===)
+  # Reorders the list of matchers so that easy ones come first.
+  # For example: nil, then single values (==), then patterns (===).
+  def optimize!
+    @matchers.sort_by! do |k, v|
+      case v
+      when nil;     0
+      when Range;   2
+      when Module;  3
+      when Regexp;  4
+      when Proc;    5 ## should handle small sets differently
+      else          1 # must be a value
+      end
+    end
+    self
   end
 
   def === obj # adapted from rinda/rinda.rb
