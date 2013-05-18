@@ -8,14 +8,15 @@ POT = PortableObjectTemplate
 
 SEED = 1237
 
-def dataset_for seed
-  srand seed
+def make_dataset
   strs = ("a".."z").map {|c| "fo" + c}
-  objs = (1..1000).map {|i| [ i, strs.sample, rand(50) ]}
-  {seed: seed, objs: objs}
+  (1..1000).map {|i| [ i, strs.sample, rand(50) ]}
 end
 
-def run_bench_on_template template, seed: nil, objs: nil
+def run_bench_on_template template, seed: nil
+  srand seed
+  objs = make_dataset
+
   matched = 0
   rslt = bench_rate n_sec: 1.0, notify: proc {|c| print c} do
     matched += 1 if template === objs.sample
@@ -32,7 +33,7 @@ def run_bench_on_template template, seed: nil, objs: nil
 end
 
 template = POT.new [ {set: [0,1,2,*100..999]}, {regex: "foo"}, {value: 0} ]
-run_bench_on_template template, dataset_for(SEED)
+run_bench_on_template template, seed: SEED
 
 template.optimize!
-run_bench_on_template template, dataset_for(SEED)
+run_bench_on_template template, seed: SEED
