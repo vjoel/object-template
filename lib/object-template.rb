@@ -1,5 +1,6 @@
 require 'set'
 
+# Base class for classes of templates used to match somewhat arbitrary objects.
 class ObjectTemplate
   # A set implementation that treats the matching operator (===) as membership.
   # Used internally by PortableObjectTemplate, but can also be used in
@@ -60,7 +61,9 @@ class ObjectTemplate
     self
   end
 
-  def === obj # adapted from rinda/rinda.rb
+  # True if the template matches the given object.
+  # Adapted from rinda/rinda.rb.
+  def === obj
     return false unless obj.respond_to?(@shibboleth)
     return false unless @size == obj.size
     @matchers.each do |k, v|
@@ -86,7 +89,7 @@ end
 # methods of entry values are used in matching. Entry values may include
 # classes, regexes, ranges, and so on, in addition to single values.
 class RubyObjectTemplate < ObjectTemplate
-  def fill_matchers k, v
+  def fill_matchers k, v  # :nodoc:
     @matchers << [k, v]
   end
 end
@@ -95,8 +98,13 @@ end
 # strings, numbers, booleans, arrays, and hashes. Special entry values
 # correspond to wildcards and matchers of several kinds. See the unit
 # tests for examples.
+#
+# The objects matched include anything constructed out of numbers, booleans,
+# including null, and strings using hashes and arrays. In other words,
+# objects that can be serialized with json or msgpack.
+#
 class PortableObjectTemplate < ObjectTemplate
-  def fill_matchers k, v
+  def fill_matchers k, v  # :nodoc:
     case v
     when nil
       @matchers << [k, nil]
