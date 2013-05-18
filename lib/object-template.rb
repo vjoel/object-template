@@ -1,6 +1,9 @@
 require 'set'
 
 class ObjectTemplate
+  # A set implementation that treats the matching operator (===) as membership.
+  # Used internally by PortableObjectTemplate, but can also be used in
+  # RubyObjectTemplate or in case statements.
   class MemberMatchingSet < Set
     def === other
       member? other
@@ -39,6 +42,7 @@ class ObjectTemplate
 
   # Reorders the list of matchers so that easy ones come first.
   # For example: nil, then single values (==), then patterns (===).
+  # Returns self.
   def optimize!
     @matchers.sort_by! do |k, v|
       case v
