@@ -42,20 +42,17 @@ class ObjectTemplate
   def optimize!
     @matchers.sort_by! do |k, v|
       case v
-      when nil;     0
-      when Range;   2
-      when Module;  3
-      when Regexp;  4
+      when nil;               0
+      when Range;             2
+      when Module;            3
+      when Regexp;            4
       when MemberMatchingSet;
-        if v.size < 10
-          3
-        elsif v.size < 100
-          4
-        else
-          5
+        if v.size < 10;       3
+        elsif v.size < 100;   4
+        else                  5
         end
-      when Proc;    5
-      else          1 # must be a value
+      when Proc;              5
+      else                    1 # assume it is a value
       end
     end
     self
