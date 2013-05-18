@@ -1,4 +1,12 @@
+require 'set'
+
 class ObjectTemplate
+  class MemberMatchingSet < Set
+    def === other
+      member? other
+    end
+  end
+
   # The key_converter is for matching objects that, for example, have had symbol
   # keys serialized to strings. Using a converter that round-trips through the
   # same serialializer, symbols in keys will match strings. However, symbols in
@@ -38,7 +46,15 @@ class ObjectTemplate
       when Range;   2
       when Module;  3
       when Regexp;  4
-      when Proc;    5 ## should handle small sets differently
+      when MemberMatchingSet;
+        if v.size < 10
+          3
+        elsif v.size < 100
+          4
+        else
+          5
+        end
+      when Proc;    5
       else          1 # must be a value
       end
     end
@@ -92,7 +108,7 @@ class PortableObjectTemplate < ObjectTemplate
         when :value, "value"
           @matchers << [k, vv]
         when :set, "set"
-          @matchers << [k, vv.method(:member?).to_proc]
+          @matchers << [k, MemberMatchingSet.new(vv)]
         when :type, "type"
           @matchers << [k, CLASS_FOR[vv]]
         when :range, "range"

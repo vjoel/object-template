@@ -5,11 +5,7 @@ require 'object-template'
 require 'set'
 require 'eq3'
 
-class Member < Set ## ?
-  def === other
-    member? other
-  end
-end
+Member = ObjectTemplate::MemberMatchingSet
 
 class TestMatch < Minitest::Test
   include Eq3
