@@ -15,11 +15,11 @@ module Eq3
   end
 
   def pot_for(pot)
-    POT.new(pot, KEY_CONV)
+    POT.new(pot, KEY_CONV).optimize!
   end
 
   def rot_for(rot)
-    ROT.new(rot, KEY_CONV)
+    ROT.new(rot, KEY_CONV).optimize!
   end
 
   def eq3 literal, rot, pot
