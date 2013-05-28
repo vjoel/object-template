@@ -30,10 +30,18 @@ def run_bench_on_template template, seed: nil
   puts "t_warmup = %12.3f sec" % rslt[:t_warmup]
   puts "t_run    = %12.3f sec" % rslt[:t_run]
   puts "rate     = %12.3f iter/sec" % rslt[:rate]
+  
+  rslt
 end
 
 template = POT.new [ {set: [0,1,2,*100..999]}, {regex: "foo"}, {value: 0} ]
-run_bench_on_template template, seed: SEED
+puts "Unoptimized:"
+r0 = run_bench_on_template template, seed: SEED
 
+puts
+puts "Optimized:"
 template.optimize!
-run_bench_on_template template, seed: SEED
+r1 = run_bench_on_template template, seed: SEED
+
+puts
+puts "Speed-up: %5.2f" % (r1[:rate] / r0[:rate])
