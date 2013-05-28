@@ -1,17 +1,17 @@
 def bench
   times = Process.times
-  t0 = times.utime #+ times.stime
+  t0 = times.utime + times.stime
 
   yield
 
   times = Process.times
-  t1 = times.utime #+ times.stime
+  t1 = times.utime + times.stime
   t1 - t0
 end
 
 def bench_rate n_sec: 1.0, n_chunk: 1, notify: nil
   times = Process.times
-  t_init = times.utime #+ times.stime
+  t_init = times.utime + times.stime
   #puts "init at #{t_init}"
 
   t_run = 0
@@ -25,7 +25,7 @@ def bench_rate n_sec: 1.0, n_chunk: 1, notify: nil
     end
     
     times = Process.times
-    t_now = times.utime #+ times.stime
+    t_now = times.utime + times.stime
       
     if t_now - t_init < n_sec/4.0 # warm up and seek stride
       n_chunk *= 2
