@@ -2,6 +2,8 @@ require 'set'
 
 # Base class for classes of templates used to match somewhat arbitrary objects.
 class ObjectTemplate
+  VERSION = "0.2"
+
   # A set implementation that treats the matching operator (===) as membership.
   # Used internally by PortableObjectTemplate, but can also be used in
   # RubyObjectTemplate or in case statements.
