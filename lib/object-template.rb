@@ -4,6 +4,8 @@ require 'set'
 class ObjectTemplate
   VERSION = "0.2"
 
+  attr_reader :spec
+
   # A set implementation that treats the matching operator (===) as membership.
   # Used internally by PortableObjectTemplate, but can also be used in
   # RubyObjectTemplate or in case statements.
