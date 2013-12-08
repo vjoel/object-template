@@ -133,11 +133,14 @@ class PortableObjectTemplate < ObjectTemplate
     end
   end
 
+  BOOLEAN = MemberMatchingSet.new([true, false])
+
   CLASS_FOR = {
-    "number" => Numeric,
-    "string" => String,
-    "list"   => Array,
-    "map"    => Hash
+    "boolean" => BOOLEAN,
+    "number"  => Numeric,
+    "string"  => String,
+    "list"    => Array,
+    "map"     => Hash
   }
 
   CLASS_FOR.default_proc = proc do |h,k|

@@ -110,15 +110,19 @@ ne3            ["foo"],       [/o{3,}/], [{regex: "o{3,}"}]
 #= 6. every test that can be expressed in terms of a type in the
 #=    template
 #=
+eq3             [true],     [TrueClass], [{type: "boolean"}]
+eq3            [false],    [FalseClass], [{type: "boolean"}]
 eq3               [42],       [Numeric], [{type: "number"}]
 eq3            ["foo"],        [String], [{type: "string"}]
 eq3          [[1,2,3]],         [Array], [{type: "list"}]
-eq3       [{a:1, b:2}],         [Hash],  [{type: "map"}]
+eq3       [{a:1, b:2}],          [Hash], [{type: "map"}]
 #=========================================================
+ne3             ["42"],     [TrueClass], [{type: "boolean"}]
+ne3                [0],    [FalseClass], [{type: "boolean"}]
 ne3             ["42"],       [Numeric], [{type: "number"}]
 ne3              [123],        [String], [{type: "string"}]
 ne3       [{a:1, b:2}],         [Array], [{type: "list"}]
-ne3          [[1,2,3]],         [Hash],  [{type: "map"}]
+ne3          [[1,2,3]],          [Hash], [{type: "map"}]
 #=========================================================
   end
 
