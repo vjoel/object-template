@@ -137,7 +137,7 @@ class PortableObjectTemplate < ObjectTemplate
 
   CLASS_FOR = {
     "boolean" => BOOLEAN,
-    "number"  => Numeric,
+    "number"  => Numeric, ## Integer?
     "string"  => String,
     "list"    => Array,
     "map"     => Hash
@@ -145,5 +145,59 @@ class PortableObjectTemplate < ObjectTemplate
 
   CLASS_FOR.default_proc = proc do |h,k|
     raise ArgumentError, "no known class for matching type #{k.inspect}"
+  end
+
+  # Convert a ROT spec into a POT spec (without creating a ROT). Not completely
+  # general: some POTs cannot be represented in this way.
+  def self.spec_from rot_spec
+    case rot_spec
+    when Array
+      rot_spec.map do |col_rot_spec|
+        column_spec_from(col_rot_spec)
+      end
+    when Hash
+      h = {}
+      rot_spec.each do |k, col_rot_spec|
+        h[k] = column_spec_from(col_rot_spec)
+      end
+      h
+    else
+      raise ArgumentError
+    end
+  end
+
+  def self.column_spec_from col_rot_spec
+    case col_rot_spec
+    when nil
+      nil
+
+    when Range
+      range = col_rot_spec
+      raise if range.exclude_end? ##
+      raise unless range.first.kind_of? Numeric ##
+      {type: "number", range: [range.first, range.last]}
+
+    when Module
+      mdl = col_rot_spec
+      class_name,_ = CLASS_FOR.find {|k,v| v == mdl}
+      raise unless class_name
+      {type: class_name}
+
+    when Regexp
+      rx = col_rot_spec
+      {regex: rx.source}
+
+    when MemberMatchingSet
+      set = col_rot_spec
+      if set == BOOLEAN
+        ## awkward API: must reference PortableObjectTemplate::BOOLEAN
+        {type: "boolean"}
+      else
+        {set: set.to_a}
+      end
+
+    else # assume it is a value
+      {value: col_rot_spec}
+    end
   end
 end
