@@ -137,7 +137,8 @@ class PortableObjectTemplate < ObjectTemplate
 
   CLASS_FOR = {
     "boolean" => BOOLEAN,
-    "number"  => Numeric, ## Integer?
+    "number"  => Numeric,
+    "integer" => Integer,
     "string"  => String,
     "list"    => Array,
     "map"     => Hash
