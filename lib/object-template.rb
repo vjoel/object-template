@@ -188,7 +188,7 @@ class PortableObjectTemplate < ObjectTemplate
       rx = col_rot_spec
       {regex: rx.source}
 
-    when MemberMatchingSet
+    when Set
       set = col_rot_spec
       if set == BOOLEAN
         ## awkward API: must reference PortableObjectTemplate::BOOLEAN
