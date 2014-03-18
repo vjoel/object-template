@@ -2,7 +2,7 @@ require 'set'
 
 # Base class for classes of templates used to match somewhat arbitrary objects.
 class ObjectTemplate
-  VERSION = "0.6"
+  VERSION = "0.7"
 
   attr_reader :spec
 
