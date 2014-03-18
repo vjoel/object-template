@@ -29,9 +29,12 @@ class ObjectTemplate
     if spec.respond_to? :to_hash # assume hash-like
       @shibboleth = :to_hash
       spec.each do |k, v|
-        kc = key_converter ? key_converter[k]: k
+        kc = key_converter ? key_converter[k=>nil].keys[0] : k
           # Note: cannot use key_converter[v] because v may have class, regex,
           # or other non-serializable object.
+          # Note: the [k=>nil].keys[0] is needed instead of just [k]
+          # because the key_converter might not convert values, only keys.
+          # We do not assume that k is a scalar.
         fill_matchers kc, v
       end
 
