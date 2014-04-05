@@ -4,7 +4,7 @@ require 'set'
 class ObjectTemplate
   VERSION = "0.7"
 
-  attr_reader :spec
+  attr_reader :spec, :key_converter
 
   # A set implementation that treats the matching operator (===) as membership.
   # Used internally by PortableObjectTemplate, but can also be used in
@@ -15,7 +15,7 @@ class ObjectTemplate
 
   # The key_converter is for matching objects that, for example, have had symbol
   # keys serialized to strings. Using a converter that round-trips through the
-  # same serialializer, symbols in keys will match strings. However, symbols in
+  # same serializer, symbols in keys will match strings. However, symbols in
   # values will not.
   def initialize spec, key_converter = nil
     unless spec.respond_to? :size and spec.respond_to? :each
@@ -24,18 +24,19 @@ class ObjectTemplate
 
     @spec = spec
     @size = spec.size
+    @key_converter = key_converter
     @matchers = []
     
     if spec.respond_to? :to_hash # assume hash-like
       @shibboleth = :to_hash
       spec.each do |k, v|
-        kc = key_converter ? key_converter[k=>nil].keys[0] : k
-          # Note: cannot use key_converter[v] because v may have class, regex,
-          # or other non-serializable object.
+        if key_converter
+          k = key_converter[k => nil].keys[0]
           # Note: the [k=>nil].keys[0] is needed instead of just [k]
           # because the key_converter might not convert values, only keys.
           # We do not assume that k is a scalar.
-        fill_matchers kc, v
+        end
+        fill_matchers k, v
       end
 
     else # assume array-like
@@ -93,6 +94,9 @@ end
 # classes, regexes, ranges, and so on, in addition to single values.
 class RubyObjectTemplate < ObjectTemplate
   def fill_matchers k, v  # :nodoc:
+    if key_converter
+      (v = key_converter[v]) rescue nil # error means templating object
+    end
     @matchers << [k, v]
   end
 end
@@ -116,6 +120,9 @@ class PortableObjectTemplate < ObjectTemplate
       v.each do |kk, vv|
         case kk
         when :value, "value"
+          if key_converter
+            (vv = key_converter[vv]) rescue nil # error means templating object
+          end
           @matchers << [k, vv]
         when :set, "set"
           @matchers << [k, MemberMatchingSet.new(vv)]
